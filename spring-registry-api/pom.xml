@@ -31,14 +31,18 @@
   <packaging>bundle</packaging>
   <name>Redback Spring Registry Api</name>
 
-  <url>http://archiva.apache.org/redback/components/spring-registry/${project.artifactId}</url>
+  <url>${webUrl}/spring-registry/${project.artifactId}</url>
 
   <distributionManagement>
     <site>
       <id>apache.website</id>
-      <url>scm:svn:https://svn.apache.org/repos/asf/archiva/site-content/redback/components/spring-registry/${project.artifactId}</url>
+      <url>${siteUrl}/spring-registry/${project.artifactId}</url>
     </site>
   </distributionManagement>
+
+  <scm>
+    <url>${scmBrowseUrl};f=${project.artifactId}</url>
+  </scm>
 
   <dependencies>
     <dependency>
