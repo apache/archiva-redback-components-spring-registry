@@ -33,7 +33,7 @@ node(labels) {
     cleanWs()
 
     stage ('Clone Sources') {
-        git url: 'https://gitbox.apache.org/repos/asf/archiva-redback-components-spring-registry.git'
+        checkout scm
     }
 
     stage ('Build') {
@@ -54,7 +54,7 @@ node(labels) {
                 mavenSettingsConfig: deploySettings
         ) {
             // Run the maven build
-            sh "mvn clean deploy -Dmaven.test.skip=true -B -U -e -fae -Dmaven.compiler.fork=false"
+            sh "mvn deploy -Dmaven.test.skip=true -B -U -e -fae -Dmaven.compiler.fork=false"
         } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe & FindBugs reports...
     }
 }
