@@ -42,9 +42,8 @@ node(labels) {
                 jdk: buildJdk,
                 mavenSettingsConfig: deploySettings
         ) {
-            // Run the maven build
             sh "mvn clean install -B -U -e -fae -Dmaven.compiler.fork=false"
-        } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe & FindBugs reports...
+        } 
     }
 
     stage ('Deploy') {
@@ -53,8 +52,7 @@ node(labels) {
                 jdk: buildJdk,
                 mavenSettingsConfig: deploySettings
         ) {
-            // Run the maven build
             sh "mvn deploy -Dmaven.test.skip=true -B -U -e -fae -Dmaven.compiler.fork=false"
-        } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe & FindBugs reports...
+        }
     }
 }
