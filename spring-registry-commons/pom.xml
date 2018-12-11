@@ -30,15 +30,11 @@
   <artifactId>spring-registry-commons</artifactId>
   <packaging>bundle</packaging>
   <name>Redback Spring Registry commons-configuration</name>
+  <properties>
+    <site.staging.base>${project.parent.basedir}/../site</site.staging.base>
+  </properties>
 
   <url>${webUrl}/spring-registry/${project.artifactId}</url>
-
-  <distributionManagement>
-    <site>
-      <id>apache.website</id>
-      <url>${siteUrl}/spring-registry/${project.artifactId}</url>
-    </site>
-  </distributionManagement>
 
   <scm>
     <url>${scmBrowseUrl};f=${project.artifactId}</url>
