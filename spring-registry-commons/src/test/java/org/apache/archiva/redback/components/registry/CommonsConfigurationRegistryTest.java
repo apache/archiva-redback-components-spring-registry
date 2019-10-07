@@ -21,10 +21,10 @@ package org.apache.archiva.redback.components.registry;
 
 import org.apache.archiva.redback.components.registry.commons.CommonsConfigurationRegistry;
 import org.apache.commons.configuration.XMLConfiguration;
-import org.codehaus.plexus.util.FileUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
 import java.util.Arrays;
@@ -346,7 +346,7 @@ public class CommonsConfigurationRegistryTest
     {
         File src = new File( "./src/test/resources/test-save.xml" );
         File dest = new File( "./target/test-classes/test-save.xml" );
-        FileUtils.copyFile( src, dest );
+        FileCopyUtils.copy( src, dest );
 
         registry = getRegistry( "test-save" );
 

@@ -32,10 +32,10 @@ import org.apache.commons.configuration.SystemConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.event.EventSource;
 import org.apache.commons.configuration.tree.DefaultExpressionEngine;
-import org.apache.commons.lang.StringUtils;
-import org.codehaus.plexus.interpolation.InterpolationException;
-import org.codehaus.plexus.interpolation.PropertiesBasedValueSource;
-import org.codehaus.plexus.interpolation.StringSearchInterpolator;
+import org.apache.commons.lang3.StringUtils;
+
+import org.apache.commons.text.StringSubstitutor;
+import org.apache.commons.text.lookup.StringLookupFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -70,7 +70,7 @@ public class CommonsConfigurationRegistry
      */
     private Configuration configuration;
 
-    private Logger logger = LoggerFactory.getLogger( getClass() );
+    private Logger logger = LoggerFactory.getLogger( getClass( ) );
 
     private String propertyDelimiter = ".";
 
@@ -83,7 +83,7 @@ public class CommonsConfigurationRegistry
     private String properties;
 
 
-    public CommonsConfigurationRegistry()
+    public CommonsConfigurationRegistry( )
     {
         // default constructor
         logger.debug( "empty constructor" );
@@ -99,22 +99,22 @@ public class CommonsConfigurationRegistry
         this.configuration = configuration;
     }
 
-    public String dump()
+    public String dump( )
     {
-        StringBuilder buffer = new StringBuilder();
+        StringBuilder buffer = new StringBuilder( );
         buffer.append( "Configuration Dump." );
-        for ( Iterator i = configuration.getKeys(); i.hasNext(); )
+        for ( Iterator i = configuration.getKeys( ); i.hasNext( ); )
         {
-            String key = (String) i.next();
+            String key = (String) i.next( );
             Object value = configuration.getProperty( key );
             buffer.append( "\n\"" ).append( key ).append( "\" = \"" ).append( value ).append( "\"" );
         }
-        return buffer.toString();
+        return buffer.toString( );
     }
 
-    public boolean isEmpty()
+    public boolean isEmpty( )
     {
-        return configuration.isEmpty();
+        return configuration.isEmpty( );
     }
 
     public Registry getSubset( String key )
@@ -129,13 +129,13 @@ public class CommonsConfigurationRegistry
 
     public List<Registry> getSubsetList( String key )
     {
-        List<Registry> subsets = new ArrayList<>();
+        List<Registry> subsets = new ArrayList<>( );
 
         boolean done = false;
         do
         {
-            Registry registry = getSubset( key + "(" + subsets.size() + ")" );
-            if ( !registry.isEmpty() )
+            Registry registry = getSubset( key + "(" + subsets.size( ) + ")" );
+            if ( !registry.isEmpty( ) )
             {
                 subsets.add( registry );
             }
@@ -153,27 +153,27 @@ public class CommonsConfigurationRegistry
     {
         Configuration configuration = this.configuration.subset( key );
 
-        Properties properties = new Properties();
-        for ( Iterator i = configuration.getKeys(); i.hasNext(); )
+        Properties properties = new Properties( );
+        for ( Iterator i = configuration.getKeys( ); i.hasNext( ); )
         {
-            String property = (String) i.next();
+            String property = (String) i.next( );
             List l = configuration.getList( property );
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder( );
             for ( Object element : l )
             {
                 sb.append( (String) element );
                 sb.append( "," );
             }
-            if ( sb.length() > 0 )
+            if ( sb.length( ) > 0 )
             {
-                sb.deleteCharAt( sb.length() - 1 );
+                sb.deleteCharAt( sb.length( ) - 1 );
             }
-            properties.setProperty( property, sb.toString() );
+            properties.setProperty( property, sb.toString( ) );
         }
         return properties;
     }
 
-    public void save()
+    public void save( )
         throws RegistryException
     {
         if ( configuration instanceof FileConfiguration )
@@ -181,11 +181,11 @@ public class CommonsConfigurationRegistry
             FileConfiguration fileConfiguration = (FileConfiguration) configuration;
             try
             {
-                fileConfiguration.save();
+                fileConfiguration.save( );
             }
             catch ( ConfigurationException e )
             {
-                throw new RegistryException( e.getMessage(), e );
+                throw new RegistryException( e.getMessage( ), e );
             }
         }
         else
@@ -213,18 +213,18 @@ public class CommonsConfigurationRegistry
     }
 
 
-    public int getChangeListenersSize()
+    public int getChangeListenersSize( )
     {
-        return EventSource.class.cast( this.configuration ).getConfigurationListeners().size();
+        return EventSource.class.cast( this.configuration ).getConfigurationListeners( ).size( );
     }
 
-    public Collection<String> getKeys()
+    public Collection<String> getKeys( )
     {
-        Set<String> keys = new HashSet<String>();
+        Set<String> keys = new HashSet<String>( );
 
-        for ( Iterator<String> i = configuration.getKeys(); i.hasNext(); )
+        for ( Iterator<String> i = configuration.getKeys( ); i.hasNext( ); )
         {
-            String key = i.next();
+            String key = i.next( );
 
             int index = key.indexOf( '.' );
             if ( index < 0 )
@@ -240,13 +240,13 @@ public class CommonsConfigurationRegistry
         return keys;
     }
 
-    public Collection getFullKeys()
+    public Collection getFullKeys( )
     {
-        Set<String> keys = new HashSet<String>();
+        Set<String> keys = new HashSet<String>( );
 
-        for ( Iterator<String> i = configuration.getKeys(); i.hasNext(); )
+        for ( Iterator<String> i = configuration.getKeys( ); i.hasNext( ); )
         {
-            keys.add( i.next() );
+            keys.add( i.next( ) );
         }
 
         return keys;
@@ -260,15 +260,15 @@ public class CommonsConfigurationRegistry
     public void removeSubset( String key )
     {
         // create temporary list since removing a key will modify the iterator from configuration
-        List keys = new ArrayList();
-        for ( Iterator i = configuration.getKeys( key ); i.hasNext(); )
+        List keys = new ArrayList( );
+        for ( Iterator i = configuration.getKeys( key ); i.hasNext( ); )
         {
-            keys.add( i.next() );
+            keys.add( i.next( ) );
         }
 
-        for ( Iterator i = keys.iterator(); i.hasNext(); )
+        for ( Iterator i = keys.iterator( ); i.hasNext( ); )
         {
-            configuration.clearProperty( (String) i.next() );
+            configuration.clearProperty( (String) i.next( ) );
         }
     }
 
@@ -337,7 +337,7 @@ public class CommonsConfigurationRegistry
             catch ( ConfigurationException e )
             {
                 throw new RegistryException(
-                    "Unable to add configuration from resource '" + resource + "': " + e.getMessage(), e );
+                    "Unable to add configuration from resource '" + resource + "': " + e.getMessage( ), e );
             }
         }
         else if ( resource.endsWith( ".xml" ) )
@@ -350,7 +350,7 @@ public class CommonsConfigurationRegistry
             catch ( ConfigurationException e )
             {
                 throw new RegistryException(
-                    "Unable to add configuration from resource '" + resource + "': " + e.getMessage(), e );
+                    "Unable to add configuration from resource '" + resource + "': " + e.getMessage( ), e );
             }
         }
         else
@@ -370,7 +370,7 @@ public class CommonsConfigurationRegistry
         throws RegistryException
     {
         CombinedConfiguration configuration = (CombinedConfiguration) this.configuration;
-        if ( file.getName().endsWith( ".properties" ) )
+        if ( file.getName( ).endsWith( ".properties" ) )
         {
             try
             {
@@ -380,10 +380,10 @@ public class CommonsConfigurationRegistry
             catch ( ConfigurationException e )
             {
                 throw new RegistryException(
-                    "Unable to add configuration from file '" + file.getName() + "': " + e.getMessage(), e );
+                    "Unable to add configuration from file '" + file.getName( ) + "': " + e.getMessage( ), e );
             }
         }
-        else if ( file.getName().endsWith( ".xml" ) )
+        else if ( file.getName( ).endsWith( ".xml" ) )
         {
             try
             {
@@ -393,18 +393,18 @@ public class CommonsConfigurationRegistry
             catch ( ConfigurationException e )
             {
                 throw new RegistryException(
-                    "Unable to add configuration from file '" + file.getName() + "': " + e.getMessage(), e );
+                    "Unable to add configuration from file '" + file.getName( ) + "': " + e.getMessage( ), e );
             }
         }
         else
         {
             throw new RegistryException(
-                "Unable to add configuration from file '" + file.getName() + "': unrecognised type" );
+                "Unable to add configuration from file '" + file.getName( ) + "': unrecognised type" );
         }
     }
 
     @PostConstruct
-    public void initialize()
+    public void initialize( )
         throws RegistryException
     {
         try
@@ -412,43 +412,34 @@ public class CommonsConfigurationRegistry
             CombinedConfiguration configuration;
             if ( StringUtils.isNotBlank( properties ) )
             {
-                try
-                {
-                    DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
-                    DefaultExpressionEngine expressionEngine = new DefaultExpressionEngine();
-                    expressionEngine.setPropertyDelimiter( propertyDelimiter );
-                    builder.setExpressionEngine( expressionEngine );
+                DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder( );
+                DefaultExpressionEngine expressionEngine = new DefaultExpressionEngine( );
+                expressionEngine.setPropertyDelimiter( propertyDelimiter );
+                builder.setExpressionEngine( expressionEngine );
 
-                    StringSearchInterpolator interpolator = new StringSearchInterpolator( "${", "}" );
-                    // interpolation as plexus did it before
-                    interpolator.addValueSource( new PropertiesBasedValueSource( System.getProperties() ) );
+                StringSubstitutor substitutor = new StringSubstitutor( StringLookupFactory.INSTANCE.systemPropertyStringLookup( ) );
 
-                    String interpolatedProps = interpolator.interpolate( properties );
+                String interpolatedProps = substitutor.replace( properties );
 
-                    logger.debug( "Loading configuration into commons-configuration, xml {}", interpolatedProps );
-                    builder.load( new StringReader( interpolatedProps ) );
-                    configuration = builder.getConfiguration( false );
-                    configuration.setExpressionEngine( expressionEngine );
-                    //configuration.set
-                }
-                catch ( InterpolationException e )
-                {
-                    throw new RuntimeException( e.getMessage(), e );
-                }
+                logger.debug( "Loading configuration into commons-configuration, xml {}", interpolatedProps );
+                builder.load( new StringReader( interpolatedProps ) );
+                configuration = builder.getConfiguration( false );
+                configuration.setExpressionEngine( expressionEngine );
+                //configuration.set
             }
             else
             {
                 logger.debug( "Creating a default configuration - no configuration was provided" );
-                configuration = new CombinedConfiguration();
+                configuration = new CombinedConfiguration( );
             }
 
-            configuration.addConfiguration( new SystemConfiguration() );
+            configuration.addConfiguration( new SystemConfiguration( ) );
 
             this.configuration = configuration;
         }
         catch ( ConfigurationException e )
         {
-            throw new RuntimeException( e.getMessage(), e );
+            throw new RuntimeException( e.getMessage( ), e );
         }
     }
 
@@ -464,7 +455,7 @@ public class CommonsConfigurationRegistry
         return configuration == null ? null : new CommonsConfigurationRegistry( configuration );
     }
 
-    public String getPropertyDelimiter()
+    public String getPropertyDelimiter( )
     {
         return propertyDelimiter;
     }

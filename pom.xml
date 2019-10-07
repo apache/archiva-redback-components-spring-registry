@@ -25,7 +25,7 @@
   <groupId>org.apache.archiva.redback.components.registry</groupId>
   <artifactId>spring-registry</artifactId>
   <version>2.5-SNAPSHOT</version>
-  <name>Redback Spring Registry Component</name>
+  <name>Redback Components :: Spring Registry Component</name>
   <packaging>pom</packaging>
 
   <properties>
@@ -45,6 +45,7 @@
     <module>spring-registry-api</module>
     <module>spring-registry-commons</module>
   </modules>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -57,56 +58,34 @@
         <artifactId>spring-registry-commons</artifactId>
         <version>${project.version}</version>
       </dependency>
+
       <dependency>
         <groupId>commons-configuration</groupId>
         <artifactId>commons-configuration</artifactId>
-        <version>${commons-configuration.version}</version>
+        <version>${commons.configuration.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-text</artifactId>
+        <version>${commons.text.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>commons-collections</groupId>
+        <artifactId>commons-collections</artifactId>
+        <version>${commons.collections.3.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>commons-beanutils</groupId>
+        <artifactId>commons-beanutils</artifactId>
+        <version>${commons.beanutils.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.annotation</groupId>
-      <artifactId>jsr250-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.inject</groupId>
-      <artifactId>javax.inject</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-core</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context-support</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-beans</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-test</artifactId>
-      <scope>compile</scope>
-    </dependency>
+
   </dependencies>
 
   <build>
@@ -121,6 +100,17 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version>
+        <configuration>
+          <source>${compiler.source}</source>
+          <target>${compiler.target}</target>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 
   <reporting>

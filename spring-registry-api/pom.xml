@@ -27,8 +27,9 @@
     <version>2.5-SNAPSHOT</version>
   </parent>
 
+  <groupId>org.apache.archiva.redback.components.registry</groupId>
   <artifactId>spring-registry-api</artifactId>
-  <name>Redback Spring Registry Api</name>
+  <name>Redback Components :: Spring Registry Api</name>
 
   <properties>
     <site.staging.base>${project.parent.basedir}/../site</site.staging.base>
@@ -39,10 +40,4 @@
     <url>${scmBrowseUrl};f=${project.artifactId}</url>
   </scm>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-utils</artifactId>
-    </dependency>
-  </dependencies>
 </project>
